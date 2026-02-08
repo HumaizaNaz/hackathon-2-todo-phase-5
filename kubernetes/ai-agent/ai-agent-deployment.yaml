@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-agent
+  labels:
+    app: ai-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ai-agent
+  template:
+    metadata:
+      labels:
+        app: ai-agent
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "ai-agent"
+        dapr.io/app-port: "8001"
+    spec:
+      containers:
+      - name: ai-agent
+        image: ai-agent:latest # Will be replaced by CI/CD
+        ports:
+        - containerPort: 8001
+        env:
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ai-agent-secrets
+              key: OPENAI_API_KEY

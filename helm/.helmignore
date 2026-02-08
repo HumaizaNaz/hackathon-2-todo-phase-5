@@ -1,0 +1,84 @@
+# Patterns to ignore when packaging Helm charts.
+# This file is a .gitignore-like file that will be used by the Helm package command to skip files when packaging Helm charts.
+# Lines starting with # are comments.
+
+# Common files that should not be in charts
+.DS_Store
+.git
+.gitignore
+.helmignore
+.terraformignore
+.github/
+.vscode/
+
+# Build artifacts
+*.bak
+*.tmp
+*.swp
+*.orig
+*.rej
+*~
+.#*
+.#*#
+#*#
+
+# Editor backup files
+*#
+.#*
+%*
+_*
+.?*
+[._]*.un~
+[._]*.swo
+[._]*.swp
+[._]*.swn
+[._]*.bak
+[._]*.old
+[._]*.orig
+[._]*.rej
+[._]*.s[a-v][a-z]
+*.s[a-v][a-z]
+*.exe
+*.o
+*.obj
+*.pyc
+*.pyo
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tgz
+*.gz
+*.bz2
+*.rar
+*.7z
+*.log
+*.sql
+*.sqlite
+*.db
+*.csv
+*.tsv
+*.dat
+*.out
+*.err
+*.pid
+*.sock
+*.lock
+*.bin
+*.min.js
+*.min.css
+
+# IDE files
+.idea/
+.project
+.classpath
+.settings/
+.buildpath
+
+# Other
+charts/
+requirements.yaml
+requirements.lock
+values.yaml.gotmpl
+templates/NOTES.txt

@@ -1,22 +1,18 @@
-# Gitignore for Phase 2 Todo Full-Stack Web App
-
-# Python
-__pycache__/
-*.pyc
-.venv/
-venv/
-dist/
-*.egg-info/
-
 # Node.js
-node_modules/
-dist/
-build/
+node_modules
+dist
+build
 *.log
 .env*
-.env.local
-.next/
-out/
+
+# Python
+__pycache__
+*.pyc
+.venv
+venv
+.pytest_cache
+.ruff_cache
+.env
 
 # General
 .DS_Store
@@ -25,10 +21,3 @@ Thumbs.db
 *.swp
 .vscode/
 .idea/
-
-# Temp files
-*.bak
-*.swp
-*.swo
-*~
-*.log

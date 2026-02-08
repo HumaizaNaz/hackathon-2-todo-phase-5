@@ -1,0 +1,33 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: smtp-binding
+spec:
+  type: bindings.smtp
+  version: v1
+  metadata:
+  - name: host
+    value: "smtp.example.com" # Replace with your SMTP host
+  - name: port
+    value: "587"
+  - name: username
+    value: "user@example.com" # Replace with your SMTP username
+  - name: password
+    secretKeyRef:
+      name: smtp-secret # Kubernetes secret for SMTP password
+      key: password
+  - name: skipVerify
+    value: "false"
+  - name: fromAddress
+    value: "no-reply@example.com" # Replace with your sender email
+---
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: cron-reminder
+spec:
+  type: bindings.cron
+  version: v1
+  metadata:
+  - name: schedule
+    value: "@every 1m" # Example: trigger every 1 minute

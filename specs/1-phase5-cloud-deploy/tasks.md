@@ -32,23 +32,23 @@ We will follow an MVP-first approach, prioritizing User Story 1 (Manage Recurrin
 ### Goal
 Initialize the project environment and set up basic Dapr and Kafka/Redpanda components required across all services.
 
--   [ ] T001 Configure monorepo structure with backend/, frontend/, mcp-server/, ai-agent/ directories
--   [ ] T002 Create initial Dapr configuration files (e.g., `dapr/components/state.yaml`, `dapr/components/pubsub.yaml`) for local development
--   [ ] T003 Set up local Kafka/Redpanda instance (e.g., via Docker Compose) in `docker-compose.yml`
--   [ ] T004 Define initial Kubernetes manifests for core services (e.g., backend deployment, service) in `kubernetes/backend/`
--   [ ] T005 Initialize Helm chart for the overall application in `helm/todo-chatbot/`
+-   [X] T001 Configure monorepo structure with backend/, frontend/, mcp-server/, ai-agent/ directories
+-   [X] T002 Create initial Dapr configuration files (e.g., `dapr/components/state.yaml`, `dapr/components/pubsub.yaml`) for local development
+-   [X] T003 Set up local Kafka/Redpanda instance (e.g., via Docker Compose) in `docker-compose.yml`
+-   [X] T004 Define initial Kubernetes manifests for core services (e.g., backend deployment, service) in `kubernetes/backend/`
+-   [X] T005 Initialize Helm chart for the overall application in `helm/todo-chatbot/`
 
 ## Phase 2: Foundational
 
 ### Goal
 Establish shared services, user authentication, and the basic application structure that all user stories will build upon.
 
--   [ ] T006 Implement OAuth2/OpenID Connect authentication in `backend/src/services/auth_service.py`
--   [ ] T007 Create User data model (if not already existing) in `backend/src/models/user.py`
--   [ ] T008 Implement basic user management endpoints in `backend/src/api/user.py`
--   [ ] T009 [P] Update existing Dockerfiles for backend, frontend, mcp-server, ai-agent to integrate Dapr sidecars
--   [ ] T010 [P] Implement Dapr service invocation patterns for inter-service communication (e.g., `backend` to `ai-agent`)
--   [ ] T011 [P] Configure Dapr state store for user preferences and general settings in `dapr/components/state.yaml`
+-   [X] T006 Implement OAuth2/OpenID Connect authentication in `backend/src/services/auth_service.py`
+-   [X] T007 Create User data model (if not already existing) in `backend/src/models/user.py`
+-   [X] T008 Implement basic user management endpoints in `backend/src/api/user.py`
+-   [X] T009 [P] Update existing Dockerfiles for backend, frontend, mcp-server, ai-agent to integrate Dapr sidecars
+-   [X] T010 [P] Implement Dapr service invocation patterns for inter-service communication (e.g., `backend` to `ai-agent`)
+-   [X] T011 [P] Configure Dapr state store for user preferences and general settings in `dapr/components/state.yaml`
 
 ## Phase 3: User Story 1 - Manage Recurring Tasks
 
@@ -57,14 +57,14 @@ Enable users to create, view, and manage tasks that repeat on a defined schedule
 
 **Independent Test**: A user can create a recurring task with a specific schedule. The system automatically generates new instances of the task according to that schedule. This delivers value by reducing manual task creation.
 
--   [ ] T012 [P] [US1] Create RecurrencePattern data model in `backend/src/models/recurrence_pattern.py`
--   [ ] T013 [P] [US1] Extend Task data model with `recurrencePatternId` and `parentTaskId` in `backend/src/models/task.py`
--   [ ] T014 [P] [US1] Implement service logic for creating and managing `RecurrencePattern` in `backend/src/services/recurrence_service.py`
--   [ ] T015 [P] [US1] Implement service logic for generating new task instances based on `RecurrencePattern` in `backend/src/services/task_generation_service.py`
--   [ ] T016 [P] [US1] Create API endpoint `POST /tasks` to support recurring task creation in `backend/src/api/task.py`
--   [ ] T017 [P] [US1] Develop frontend UI component for defining recurrence patterns during task creation in `frontend/src/components/RecurringTaskForm.tsx`
--   [ ] T018 [P] [US1] Integrate frontend with backend API for recurring task creation in `frontend/src/services/task_api.ts`
--   [ ] T019 [US1] Develop frontend UI to display generated task instances in `frontend/src/pages/tasks.tsx`
+-   [X] T012 [P] [US1] Create RecurrencePattern data model in `backend/src/models/recurrence_pattern.py`
+-   [X] T013 [P] [US1] Extend Task data model with `recurrencePatternId` and `parentTaskId` in `backend/src/models/task.py`
+-   [X] T014 [P] [US1] Implement service logic for creating and managing `RecurrencePattern` in `backend/src/services/recurrence_service.py`
+-   [X] T015 [P] [US1] Implement service logic for generating new task instances based on `RecurrencePattern` in `backend/src/services/task_generation_service.py`
+-   [X] T016 [P] [US1] Create API endpoint `POST /tasks` to support recurring task creation in `backend/src/api/task.py`
+-   [X] T017 [P] [US1] Develop frontend UI component for defining recurrence patterns during task creation in `frontend/src/components/RecurringTaskForm.tsx`
+-   [X] T018 [P] [US1] Integrate frontend with backend API for recurring task creation in `frontend/src/services/task_api.ts`
+-   [X] T019 [US1] Develop frontend UI to display generated task instances in `frontend/src/pages/tasks.tsx`
 
 ## Phase 4: User Story 2 - Receive Due Date Reminders
 
@@ -73,15 +73,15 @@ Allow users to set due dates for tasks and receive timely notifications.
 
 **Independent Test**: A user can assign a due date to a task and set a reminder time. The system sends a notification to the user at the specified reminder time. This delivers value by preventing missed deadlines.
 
--   [ ] T020 [P] [US2] Extend Task data model with `dueDate` and `reminderSettings` (embedded) in `backend/src/models/task.py`
--   [ ] T021 [P] [US2] Create Notification data model in `backend/src/models/notification.py`
--   [ ] T022 [P] [US2] Implement service logic for scheduling and sending notifications in `backend/src/services/notification_service.py`
--   [ ] T023 [P] [US2] Implement a Dapr output binding for chosen notification mechanism (e.g., email, push) in `dapr/components/bindings.yaml`
--   [ ] T024 [P] [US2] Create Dapr input binding (cron) for triggering reminder checks in `dapr/components/bindings.yaml`
--   [ ] T025 [P] [US2] Develop AgentSkill for cron-based reminder generation in `ai-agent/src/skills/reminder_skill.py`
--   [ ] T026 [P] [US2] Create API endpoints for managing reminder settings (`PUT /tasks/{id}`) and notifications (`GET /notifications`, `PUT /notifications/{id}/read`) in `backend/src/api/task.py` and `backend/src/api/notification.py`
--   [ ] T027 [P] [US2] Develop frontend UI components for setting due dates and reminder preferences in `frontend/src/components/TaskForm.tsx`
--   [ ] T028 [P] [US2] Develop frontend UI to display notifications in `frontend/src/components/NotificationCenter.tsx`
+-   [X] T020 [P] [US2] Extend Task data model with `dueDate` and `reminderSettings` (embedded) in `backend/src/models/task.py`
+-   [X] T021 [P] [US2] Create Notification data model in `backend/src/models/notification.py`
+-   [X] T022 [P] [US2] Implement service logic for scheduling and sending notifications in `backend/src/services/notification_service.py`
+-   [X] T023 [P] [US2] Implement a Dapr output binding for chosen notification mechanism (e.g., email, push) in `dapr/components/bindings.yaml`
+-   [X] T024 [P] [US2] Create Dapr input binding (cron) for triggering reminder checks in `dapr/components/bindings.yaml`
+-   [X] T025 [P] [US2] Develop AgentSkill for cron-based reminder generation in `ai-agent/src/skills/reminder_skill.py`
+-   [X] T026 [P] [US2] Create API endpoints for managing reminder settings (`PUT /tasks/{id}`) and notifications (`GET /notifications`, `PUT /notifications/{id}/read`) in `backend/src/api/task.py` and `backend/src/api/notification.py`
+-   [X] T027 [P] [US2] Develop frontend UI components for setting due dates and reminder preferences in `frontend/src/components/TaskForm.tsx`
+-   [X] T028 [P] [US2] Develop frontend UI to display notifications in `frontend/src/components/NotificationCenter.tsx`
 
 ## Phase 5: User Story 3 - Organize and Filter Tasks
 
@@ -90,20 +90,20 @@ Enable users to assign priorities and tags, and then efficiently search, filter,
 
 **Independent Test**: A user can add a priority and multiple tags to a task. They can then use search and filter functions to quickly locate tasks based on these attributes. This delivers value by enhancing task organization.
 
--   [ ] T029 [P] [US3] Extend Task data model with `priority` and `tags` fields in `backend/src/models/task.py`
--   [ ] T030 [P] [US3] Implement backend service logic for searching, filtering, and sorting tasks in `backend/src/services/task_query_service.py`
--   [ ] T031 [P] [US3] Enhance `GET /tasks` API endpoint to accept search, filter, and sort parameters in `backend/src/api/task.py`
--   [ ] T032 [P] [US3] Develop frontend UI components for assigning priorities and tags in `frontend/src/components/TaskForm.tsx`
--   [ ] T033 [P] [US3] Implement frontend search bar and filter/sort controls in `frontend/src/components/TaskListControls.tsx`
--   [ ] T034 [US3] Integrate frontend with enhanced `GET /tasks` API for dynamic task display in `frontend/src/services/task_api.ts`
+-   [X] T029 [P] [US3] Extend Task data model with `priority` and `tags` fields in `backend/src/models/task.py`
+-   [X] T030 [P] [US3] Implement backend service logic for searching, filtering, and sorting tasks in `backend/src/services/task_query_service.py`
+-   [X] T031 [P] [US3] Enhance `GET /tasks` API endpoint to accept search, filter, and sort parameters in `backend/src/api/task.py`
+-   [X] T032 [P] [US3] Develop frontend UI components for assigning priorities and tags in `frontend/src/components/TaskForm.tsx`
+-   [X] T033 [P] [US3] Implement frontend search bar and filter/sort controls in `frontend/src/components/TaskListControls.tsx`
+-   [X] T034 [US3] Integrate frontend with enhanced `GET /tasks` API for dynamic task display in `frontend/src/services/task_api.ts`
 
 ## Phase 6: Deployment & Operations
 
 ### Goal
 Ensure the application can be deployed locally (Minikube) and to cloud Kubernetes environments (DOKS/GKE/AKS) with robust CI/CD, monitoring, and logging.
 
--   [ ] T035 Configure `docker-compose.yml` for full local Minikube deployment including Dapr, Kafka/Redpanda
--   [ ] T036 Refine Kubernetes manifests for all services (backend, frontend, mcp-server, ai-agent) in `kubernetes/`
+-   [X] T035 Configure `docker-compose.yml` for full local Minikube deployment including Dapr, Kafka/Redpanda
+-   [X] T036 Refine Kubernetes manifests for all services (backend, frontend, mcp-server, ai-agent) in `kubernetes/`
 -   [ ] T037 Develop Helm charts for deploying the entire application to Kubernetes in `helm/todo-chatbot/`
 -   [ ] T038 Create GitHub Actions workflow for CI (build, test, Docker image push) in `.github/workflows/ci.yml`
 -   [ ] T039 Create GitHub Actions workflow for CD to DOKS/GKE/AKS (Helm deploy) in `.github/workflows/cd.yml`

@@ -69,3 +69,32 @@ app.include_router(chat.router, prefix="/api/chat", tags=["chat"])
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the Todo App Backend!"}
+
+@app.post("/api/dapr-invoke-ai-agent")
+async def invoke_ai_agent(request: Request):
+    """
+    Demonstrates Dapr service invocation to the AI Agent.
+    This is a placeholder and should be replaced with actual logic
+    where the backend needs to communicate with the AI agent.
+    """
+    from dapr.clients import DaprClient
+    try:
+        with DaprClient() as d:
+            # Invoke a method on the AI agent service
+            # Replace 'generate_response' with the actual method name on your AI agent
+            # and 'ai-agent' with the actual Dapr App ID of your AI agent.
+            # The 'verb' (HTTP method) should match the AI agent's endpoint.
+            # The body could be any data the AI agent expects.
+            result = d.invoke_method(
+                app_id='ai-agent',
+                method_name='generate_response', # Placeholder method name
+                data='{"prompt": "hello from backend"}',
+                http_verb='POST',
+                content_type="application/json"
+            )
+            print(f"AI Agent response: {result.text()}")
+            return {"status": "invoked", "response": result.text()}
+    except Exception as e:
+        print(f"Error invoking AI Agent: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to invoke AI Agent: {e}")
+

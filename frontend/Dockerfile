@@ -25,4 +25,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
 EXPOSE 3000
+
+# Dapr sidecar integration details:
+# For local Dapr run: dapr run --app-id frontend --app-port 3000 --dapr-http-port 3501 --dapr-grpc-port 50002 -- npm start
+# For Kubernetes deployment, these are usually handled by Dapr annotations on the deployment YAML.
+
 CMD ["node", "server.js"]

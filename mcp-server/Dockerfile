@@ -24,5 +24,9 @@ USER appuser
 
 EXPOSE 8003
 
+# Dapr sidecar integration details:
+# For local Dapr run: dapr run --app-id mcp-server --app-port 8003 --dapr-http-port 3502 --dapr-grpc-port 50003 -- python main.py
+# For Kubernetes deployment, these are usually handled by Dapr annotations on the deployment YAML.
+
 # Start MCP server
 CMD ["python", "main.py"]

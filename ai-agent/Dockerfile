@@ -31,4 +31,8 @@ USER app
 
 EXPOSE 8001
 
+# Dapr sidecar integration details:
+# For local Dapr run: dapr run --app-id ai-agent --app-port 8001 --dapr-http-port 3503 --dapr-grpc-port 50004 -- uvicorn main:app --host 0.0.0.0 --port 8001
+# For Kubernetes deployment, these are usually handled by Dapr annotations on the deployment YAML.
+
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8001"]
