@@ -1,0 +1,89 @@
+# Database Management Skill
+name: database-management
+version: 1.0.0
+description: Reusable skill for managing database operations in the Todo AI Chatbot application including cleanup, schema fixes, and maintenance tasks
+category: database-operations
+tags: [database, postgresql, neon-db, migrations, cleanup, fix]
+
+# Parameters that can be passed to the skill
+parameters:
+  - name: operation_type
+    type: string
+    required: true
+    enum: ["cleanup", "fix", "migrate", "backup", "restore"]
+    description: Type of database operation to perform
+
+  - name: environment
+    type: string
+    required: false
+    default: "development"
+    enum: ["development", "kubernetes", "production"]
+    description: Target environment for operations
+
+  - name: dry_run
+    type: boolean
+    required: false
+    default: false
+    description: Preview operations without executing them
+
+  - name: backup_location
+    type: string
+    required: false
+    description: Location to store/restore database backups
+
+# Prerequisites for the skill
+prerequisites:
+  - file_exists: ./backend/core/db.py
+  - has_dependency: sqlalchemy
+  - has_tool: kubectl  # For Kubernetes operations
+
+# Execution steps
+steps:
+  # Step 1: Validate operation type
+  - name: validate_operation
+    action: validate_enum
+    target: ${operation_type}
+    allowed_values: ["cleanup", "fix", "migrate", "backup", "restore"]
+    output: validated_operation
+
+  # Step 2: Check environment and connectivity
+  - name: check_environment
+    action: check_environment
+    target: ${environment}
+    output: environment_status
+
+  # Step 3: Perform selected operation
+  - name: execute_operation
+    action: conditional_execute
+    condition: ${validated_operation}
+    cases:
+      cleanup:
+        - execute_script: ./cleanupdb.py
+      fix:
+        - execute_script: ./fixdb.py
+      migrate:
+        - execute_migration: pending_alembic_migrations
+      backup:
+        - create_backup: ${backup_location}
+      restore:
+        - restore_backup: ${backup_location}
+
+  # Step 4: Verify operation success
+  - name: verify_success
+    action: check_database_status
+    output: operation_result
+
+# Safety checks
+safety_checks:
+  - confirm_destructive_operations: ${validated_operation} in ["cleanup", "restore"]
+  - verify_environment_not_production: ${environment} == "production" and ${dry_run} == false
+  - check_disk_space: ${validated_operation} in ["backup"]
+
+# Output of the skill
+outputs:
+  - name: operation_result
+    description: Result of the database operation
+  - name: affected_tables
+    description: List of tables affected by the operation
+  - name: execution_time
+    description: Time taken to complete the operation

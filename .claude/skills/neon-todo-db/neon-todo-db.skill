@@ -1,0 +1,110 @@
+# Neon PostgreSQL Database Skill for Todo AI Chatbot
+name: neon-todo-db
+version: 1.0.0
+description: Specialized skill for managing Neon PostgreSQL database operations specifically for the Todo AI Chatbot application, including schema management, connection optimization, and deployment workflows in Kubernetes environments
+category: database-operations
+tags: [neon, postgresql, database, todo-app, kubernetes, serverless]
+
+# Parameters that can be passed to the skill
+parameters:
+  - name: operation_type
+    type: string
+    required: true
+    enum: ["setup", "connect", "migrate", "branch", "optimize", "troubleshoot"]
+    description: Type of Neon database operation to perform
+
+  - name: connection_type
+    type: string
+    required: false
+    default: "pooled"
+    enum: ["pooled", "direct"]
+    description: Neon connection type to use
+
+  - name: environment
+    type: string
+    required: false
+    default: "kubernetes"
+    enum: ["development", "kubernetes", "production"]
+    description: Target environment for operations
+
+  - name: branch_name
+    type: string
+    required: false
+    description: Name of Neon branch for operations
+
+  - name: schema_action
+    type: string
+    required: false
+    enum: ["create", "update", "validate"]
+    description: Schema management action to perform
+
+# Prerequisites for the skill
+prerequisites:
+  - file_exists: ./backend/core/db.py
+  - has_tool: kubectl
+  - has_tool: neonctl  # For Neon CLI operations
+  - has_env_var: DATABASE_URL
+
+# Execution steps
+steps:
+  # Step 1: Validate operation type
+  - name: validate_operation
+    action: validate_enum
+    target: ${operation_type}
+    allowed_values: ["setup", "connect", "migrate", "branch", "optimize", "troubleshoot"]
+    output: validated_operation
+
+  # Step 2: Check environment and connectivity
+  - name: check_environment
+    action: check_environment
+    target: ${environment}
+    output: environment_status
+
+  # Step 3: Perform selected operation
+  - name: execute_operation
+    action: conditional_execute
+    condition: ${validated_operation}
+    cases:
+      setup:
+        - configure_neon_connection: ${connection_type}
+        - create_k8s_secrets: neon-db-secret
+        - validate_schema: ./backend/core/db.py
+      connect:
+        - test_connection: ${connection_type}
+        - verify_ssl_settings: enabled
+        - check_pool_settings: configured
+      migrate:
+        - run_migrations: pending_changes
+        - backup_before_migration: ${environment} != "development"
+      branch:
+        - manage_branch: ${branch_name}
+        - update_connection_string: ${branch_name}
+      optimize:
+        - tune_connection_pooling: ${environment}
+        - optimize_query_performance: enabled
+      troubleshoot:
+        - diagnose_connection_issues: ${connection_type}
+        - check_neon_metrics: enabled
+
+  # Step 4: Verify operation success
+  - name: verify_success
+    action: check_database_status
+    output: operation_result
+
+# Safety checks
+safety_checks:
+  - verify_neon_credentials: present_and_valid
+  - check_quota_limits: neon_project
+  - confirm_production_ops: ${environment} == "production"
+  - validate_connection_pooling: ${connection_type} == "pooled"
+
+# Output of the skill
+outputs:
+  - name: operation_result
+    description: Result of the Neon database operation
+  - name: connection_string
+    description: Neon connection string used for the operation
+  - name: execution_time
+    description: Time taken to complete the operation
+  - name: affected_resources
+    description: List of resources affected by the operation

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "todo-chatbot.fullname" . }}-ai-agent
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "todo-chatbot.labels" . | nindent 4 }}
+    app: ai-agent
+spec:
+  selector:
+    {{- include "todo-chatbot.selectorLabels" . | nindent 4 }}
+    app: ai-agent
+  ports:
+    - protocol: TCP
+      port: {{ .Values.aiAgent.service.port }}
+      targetPort: 8001
+  type: {{ .Values.aiAgent.service.type }}

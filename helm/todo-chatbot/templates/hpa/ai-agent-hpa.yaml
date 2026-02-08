@@ -1,0 +1,20 @@
+{{- if .Values.hpa.aiAgent.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "todo-chatbot.fullname" . }}-ai-agent-hpa
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "todo-chatbot.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "todo-chatbot.fullname" . }}-ai-agent
+  minReplicas: {{ .Values.hpa.aiAgent.minReplicas }}
+  maxReplicas: {{ .Values.hpa.aiAgent.maxReplicas }}
+  metrics:
+  {{- with .Values.hpa.aiAgent.metrics }}
+  {{- toYaml . | nindent 2 }}
+  {{- end }}
+{{- end }}
