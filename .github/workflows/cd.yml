@@ -1,0 +1,44 @@
+name: CD Deploy to Kubernetes
+
+on:
+  push:
+    branches: [ "main" ] # Trigger on pushes to main branch
+
+env:
+  # Kubernetes cluster details - these would be secrets in a real setup
+  KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+  KUBE_CLUSTER_NAME: your-cluster-name # e.g., 'do-nyc1-my-cluster' or 'gke_project-id_zone_cluster-name'
+  KUBE_CONTEXT_NAME: your-kube-context # e.g., 'do-nyc1-my-cluster' or 'gke_project-id_zone_cluster-name'
+  KUBE_NAMESPACE: default # Or your application namespace
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Kubeconfig
+      run: |
+        mkdir -p ~/.kube
+        echo "${{ env.KUBE_CONFIG_DATA }}" > ~/.kube/config
+        chmod 600 ~/.kube/config
+        kubectl config use-context ${{ env.KUBE_CONTEXT_NAME }}
+
+    - name: Setup Helm
+      uses: azure/setup-helm@v1
+      with:
+        version: v3.8.1
+
+    - name: Deploy with Helm
+      run: |
+        helm upgrade --install todo-chatbot ./helm/todo-chatbot 
+          --namespace ${{ env.KUBE_NAMESPACE }} 
+          --set image.repository=${{ secrets.DOCKER_USERNAME }}/frontend 
+          --set image.tag=latest 
+          --set backend.image.repository=${{ secrets.DOCKER_USERNAME }}/backend 
+          --set backend.image.tag=latest 
+          --set mcp_server.image.repository=${{ secrets.DOCKER_USERNAME }}/mcp-server 
+          --set mcp_server.image.tag=latest 
+          --set ai_agent.image.repository=${{ secrets.DOCKER_USERNAME }}/ai-agent 
+          --set ai_agent.image.tag=latest

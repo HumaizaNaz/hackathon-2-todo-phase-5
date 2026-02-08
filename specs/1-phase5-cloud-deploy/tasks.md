@@ -104,19 +104,19 @@ Ensure the application can be deployed locally (Minikube) and to cloud Kubernete
 
 -   [X] T035 Configure `docker-compose.yml` for full local Minikube deployment including Dapr, Kafka/Redpanda
 -   [X] T036 Refine Kubernetes manifests for all services (backend, frontend, mcp-server, ai-agent) in `kubernetes/`
--   [ ] T037 Develop Helm charts for deploying the entire application to Kubernetes in `helm/todo-chatbot/`
--   [ ] T038 Create GitHub Actions workflow for CI (build, test, Docker image push) in `.github/workflows/ci.yml`
--   [ ] T039 Create GitHub Actions workflow for CD to DOKS/GKE/AKS (Helm deploy) in `.github/workflows/cd.yml`
--   [ ] T040 Integrate monitoring solution (e.g., Prometheus/Grafana) into Kubernetes deployments
--   [ ] T041 Implement centralized logging (e.g., Fluentd/Elasticsearch/Kibana) for all services
+-   [X] T037 Develop Helm charts for deploying the entire application to Kubernetes in `helm/todo-chatbot/`
+-   [X] T038 Create GitHub Actions workflow for CI (build, test, Docker image push) in `.github/workflows/ci.yml`
+-   [X] T039 Create GitHub Actions workflow for CD to DOKS/GKE/AKS (Helm deploy) in `.github/workflows/cd.yml`
+-   [X] T040 Integrate monitoring solution (e.g., Prometheus/Grafana) into Kubernetes deployments
+-   [X] T041 Implement centralized logging (e.g., Fluentd/Elasticsearch/Kibana) for all services
 
 ## Phase 7: Polish & Cross-Cutting Concerns
 
 ### Goal
 Address remaining quality, performance, and cross-cutting concerns to ensure a robust and user-friendly application.
 
--   [ ] T042 Implement comprehensive error handling and user feedback mechanisms across frontend and backend
--   [ ] T043 Optimize application for performance based on success criteria (SC-001, SC-002, SC-003)
--   [ ] T044 Conduct security review and implement necessary security best practices (e.g., input validation, secure configurations)
--   [ ] T045 Create `README.md` with detailed deployment instructions for local and cloud environments
--   [ ] T046 Finalize documentation for API, data model, and agent skills
+-   [X] T042 Implement comprehensive error handling and user feedback mechanisms across frontend and backend
+-   [X] T043 Optimize application for performance based on success criteria (SC-001, SC-002, SC-003)
+-   [X] T044 Conduct security review and implement necessary security best practices (e.g., input validation, secure configurations)
+-   [X] T045 Create `README.md` with detailed deployment instructions for local and cloud environments
+-   [X] T046 Finalize documentation for API, data model, and agent skills
